@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vobile Video Analysis Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        [x-cloak] { display: none !important; }
+        iframe { border: none; width: 100%; height: 100%; }
+        .toast-enter { transform: translateX(100%); opacity: 0; }
+        .toast-enter-active { transform: translateX(0); opacity: 1; transition: all 0.4s ease-out; }
+        .toast-exit { transform: translateX(0); opacity: 1; }
+        .toast-exit-active { transform: translateX(100%); opacity: 0; transition: all 0.3s ease-in; }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 h-screen overflow-hidden flex" x-data="{
+    lang: 'en',
+    currentTab: 'analysis',
+    toast: { show: false, message: '', type: 'info' },
+    
+    toggleLang() {
+        this.lang = this.lang === 'en' ? 'cn' : 'en';
+    },
+    
+    showNotification(featureKey) {
+        const messages = {
+            dashboard: {
+                en: 'Live analytics stream is decoupled in this demo instance.',
+                cn: '实时分析数据流在此演示实例中已解耦。'
+            },
+            library: {
+                en: 'Cloud asset storage is currently in read-only mode.',
+                cn: '云端媒体资产库当前处于只读模式。'
+            },
+            settings: {
+                en: 'System configuration is locked by security policy.',
+                cn: '系统配置已被安全策略锁定。'
+            },
+            export: {
+                en: 'Data pipeline connection required for batch export.',
+                cn: '批量导出功能需要连接生产环境数据管道。'
+            },
+            user: {
+                en: 'User profile management is managed by SSO provider.',
+                cn: '用户档案由企业 SSO 单点登录系统托管。'
+            }
+        };
+        
+        this.toast.message = messages[featureKey][this.lang];
+        this.toast.show = true;
+        setTimeout(() => { this.toast.show = false }, 3000);
+    },
+
+    t(key) {
+        const dict = {
+            en: {
+                app_name: 'Vobile Video Analysis',
+                dashboard: 'Dashboard',
+                library: 'Media Assets',
+                analysis: 'Video Understanding',
+                settings: 'System Config',
+                task_name: 'Video Structural Analysis',
+                subtitle: 'Object Detection • Person ReID • OCR',
+                status: 'Analyzed',
+                export: 'Export JSON',
+                source_video: 'Source Footage',
+                insight_panel: 'Analysis Results',
+                admin_role: 'Administrator'
+            },
+            cn: {
+                app_name: 'Vobile 视频分析平台',
+                dashboard: '总览仪表盘',
+                library: '媒体资产',
+                analysis: '视频理解',
+                settings: '系统配置',
+                task_name: '视频结构化分析任务',
+                subtitle: '物体检测 • 人物重识别 • 字幕提取',
+                status: '已完成',
+                export: '导出数据',
+                source_video: '原始视频流',
+                insight_panel: '分析结果面板',
+                admin_role: '系统管理员'
+            }
+        };
+        return dict[this.lang][key];
+    }
+}">
+
+    <div class="fixed top-6 right-6 z-[60]" x-show="toast.show" x-transition:enter="toast-enter-active" x-transition:enter-start="toast-enter" x-transition:enter-end="toast-enter-active" x-transition:leave="toast-exit-active" x-transition:leave-start="toast-exit" x-transition:leave-end="toast-exit-active" x-cloak>
+        <div class="bg-slate-800 text-white px-6 py-4 rounded-lg shadow-xl flex items-center space-x-3 border-l-4 border-blue-500">
+            <i class="fa-solid fa-circle-info text-blue-400"></i>
+            <span class="text-sm font-medium" x-text="toast.message"></span>
+        </div>
+    </div>
+
+    <aside class="w-64 bg-slate-900 text-slate-300 flex flex-col flex-shrink-0 transition-all z-50">
+        <div class="h-16 flex items-center px-6 border-b border-slate-800 bg-slate-950">
+            <div class="w-6 h-6 bg-blue-600 rounded flex items-center justify-center mr-3">
+                <i class="fa-solid fa-play text-white text-xs"></i>
+            </div>
+            <span class="font-bold text-white tracking-tight">Vobile <span class="font-normal text-slate-400">Analysis</span></span>
+        </div>
+
+        <nav class="flex-1 py-6 space-y-1">
+            <a href="#" @click.prevent="showNotification('dashboard')" class="flex items-center px-6 py-3 hover:bg-slate-800 hover:text-white transition-colors">
+                <i class="fa-solid fa-grid-2 w-5 text-center"></i>
+                <span class="ml-3 text-sm" x-text="t('dashboard')"></span>
+            </a>
+            <a href="#" @click.prevent="showNotification('library')" class="flex items-center px-6 py-3 hover:bg-slate-800 hover:text-white transition-colors">
+                <i class="fa-solid fa-folder-open w-5 text-center"></i>
+                <span class="ml-3 text-sm" x-text="t('library')"></span>
+            </a>
+            <a href="#" class="flex items-center px-6 py-3 bg-blue-900/20 text-blue-400 border-r-2 border-blue-500">
+                <i class="fa-solid fa-layer-group w-5 text-center"></i>
+                <span class="ml-3 text-sm font-medium" x-text="t('analysis')"></span>
+            </a>
+            <a href="#" @click.prevent="showNotification('settings')" class="flex items-center px-6 py-3 hover:bg-slate-800 hover:text-white transition-colors">
+                <i class="fa-solid fa-gear w-5 text-center"></i>
+                <span class="ml-3 text-sm" x-text="t('settings')"></span>
+            </a>
+        </nav>
+
+        <div class="p-4 border-t border-slate-800 bg-slate-950 cursor-pointer hover:bg-slate-900 transition-colors" @click="showNotification('user')">
+            <div class="flex items-center space-x-3">
+                <div class="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center text-xs text-white">AD</div>
+                <div>
+                    <p class="text-xs font-medium text-white" x-text="t('admin_role')"></p>
+                    <p class="text-[10px] text-slate-500">Vobile Engine v3.1</p>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <main class="flex-1 flex flex-col min-w-0 bg-gray-100 h-full relative">
+        <header class="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 sticky top-0 z-40">
+            <div class="flex items-center">
+                <div class="mr-4">
+                    <h1 class="text-base font-semibold text-gray-900" x-text="t('task_name')"></h1>
+                    <div class="flex items-center text-xs text-gray-500 mt-0.5">
+                        <i class="fa-solid fa-circle-check text-green-500 mr-1.5 text-[10px]"></i>
+                        <span x-text="t('subtitle')"></span>
+                    </div>
+                </div>
+                <span class="px-2.5 py-0.5 rounded text-[10px] font-medium bg-green-50 text-green-700 border border-green-100 uppercase" x-text="t('status')"></span>
+            </div>
+
+            <div class="flex items-center space-x-3">
+                <button @click="toggleLang()" class="flex items-center justify-center px-3 py-1.5 border border-gray-300 rounded text-xs font-medium text-gray-600 hover:bg-gray-50 transition-colors bg-white">
+                    <i class="fa-solid fa-globe mr-2 text-gray-400"></i>
+                    <span x-text="lang === 'en' ? 'EN' : '简中'"></span>
+                </button>
+                <button @click="showNotification('export')" class="bg-slate-900 hover:bg-slate-800 text-white px-4 py-1.5 rounded text-xs font-medium shadow-sm transition-colors flex items-center">
+                    <i class="fa-solid fa-download mr-2"></i>
+                    <span x-text="t('export')"></span>
+                </button>
+            </div>
+        </header>
+
+        <div class="flex-1 p-6 overflow-hidden">
+            <div class="grid grid-cols-12 gap-6 h-full">
+                
+                <div class="col-span-12 lg:col-span-8 flex flex-col h-full rounded-lg overflow-hidden shadow-sm border border-gray-200 bg-white">
+                    <div class="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
+                        <div class="flex items-center text-sm font-medium text-gray-700">
+                            <i class="fa-solid fa-video text-gray-400 mr-2"></i>
+                            <span x-text="t('source_video')"></span>
+                        </div>
+                        <div class="text-[10px] text-gray-400 font-mono">ID: siu8eqe4x2</div>
+                    </div>
+                    <div class="flex-1 bg-black relative">
+                        <iframe 
+                            src="https://www.videoindexer.ai/embed/player/de2875f1-eaa8-43ef-b9fe-ff03a062f784/siu8eqe4x2/?accessToken=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJWZXJzaW9uIjoiMi4wLjAuMCIsIktleVZlcnNpb24iOiI1YmZmYWI1MTUwZWI0NGM4ODMzNzE2NzVhNzcwYzU4YSIsIkFjY291bnRJZCI6ImRlMjg3NWYxLWVhYTgtNDNlZi1iOWZlLWZmMDNhMDYyZjc4NCIsIkFjY291bnRUeXBlIjoiVHJpYWwiLCJWaWRlb0lkIjoic2l1OGVxZTR4MiIsIlBlcm1pc3Npb24iOiJSZWFkZXIiLCJFeHRlcm5hbFVzZXJJZCI6ImRiNzIwMTc3MzQ1YTJmMzIiLCJVc2VyVHlwZSI6Ik1pY3Jvc29mdCIsIklzc3VlckxvY2F0aW9uIjoiVHJpYWwiLCJuYmYiOjE3NjU3ODI1MDQsImV4cCI6MTc2NTc4NjQwNCwiaXNzIjoiaHR0cHM6Ly9hcGkudmlkZW9pbmRleGVyLmFpLyIsImF1ZCI6Imh0dHBzOi8vYXBpLnZpZGVvaW5kZXhlci5haS8ifQ.hWQIafxW971wP1lgZw6iMoeVsjraMUD_USPfA12YJnMp5BX8Lz9HY19A3cZVZNcbajqTeEER79azwtlpYYGyDjXRf7K0frX8AzsLyaXL_22zcdM-VqqvFbgXHKECkurMREfQmEKqN_ZNm3zc-RB6oH122LR-VF6z3Mc6gIYApnrs9XSWp6fJ1va17CE5X7uf3W1UaZMnjrnE7FLRWD5DG3y2LifyoSMGJ6LkZC46N5pLOZ1XM_A1bQZDkgD22UoEtR0tR21uGGBF2Qx0imu2BlTU4A3nKBVYI57P6Tl8fs6lroQXLDbqSE0dwLcHdYAbHd1UULcKZ_SQB_k9vFLUmg&locale=zh-CN&location=trial" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+                <div class="col-span-12 lg:col-span-4 flex flex-col h-full rounded-lg overflow-hidden shadow-sm border border-gray-200 bg-white">
+                    <div class="px-4 py-3 border-b border-gray-100 bg-gray-50/50">
+                        <div class="flex items-center text-sm font-medium text-gray-700">
+                            <i class="fa-solid fa-list-check text-gray-400 mr-2"></i>
+                            <span x-text="t('insight_panel')"></span>
+                        </div>
+                    </div>
+                    <div class="flex-1 relative">
+                        <iframe 
+                            src="https://www.videoindexer.ai/embed/insights/de2875f1-eaa8-43ef-b9fe-ff03a062f784/siu8eqe4x2/?accessToken=eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJWZXJzaW9uIjoiMi4wLjAuMCIsIktleVZlcnNpb24iOiI1YmZmYWI1MTUwZWI0NGM4ODMzNzE2NzVhNzcwYzU4YSIsIkFjY291bnRJZCI6ImRlMjg3NWYxLWVhYTgtNDNlZi1iOWZlLWZmMDNhMDYyZjc4NCIsIkFjY291bnRUeXBlIjoiVHJpYWwiLCJWaWRlb0lkIjoic2l1OGVxZTR4MiIsIlBlcm1pc3Npb24iOiJSZWFkZXIiLCJFeHRlcm5hbFVzZXJJZCI6ImRiNzIwMTc3MzQ1YTJmMzIiLCJVc2VyVHlwZSI6Ik1pY3Jvc29mdCIsIklzc3VlckxvY2F0aW9uIjoiVHJpYWwiLCJuYmYiOjE3NjU3ODI1MDQsImV4cCI6MTc2NTc4NjQwNCwiaXNzIjoiaHR0cHM6Ly9hcGkudmlkZW9pbmRleGVyLmFpLyIsImF1ZCI6Imh0dHBzOi8vYXBpLnZpZGVvaW5kZXhlci5haS8ifQ.hWQIafxW971wP1lgZw6iMoeVsjraMUD_USPfA12YJnMp5BX8Lz9HY19A3cZVZNcbajqTeEER79azwtlpYYGyDjXRf7K0frX8AzsLyaXL_22zcdM-VqqvFbgXHKECkurMREfQmEKqN_ZNm3zc-RB6oH122LR-VF6z3Mc6gIYApnrs9XSWp6fJ1va17CE5X7uf3W1UaZMnjrnE7FLRWD5DG3y2LifyoSMGJ6LkZC46N5pLOZ1XM_A1bQZDkgD22UoEtR0tR21uGGBF2Qx0imu2BlTU4A3nKBVYI57P6Tl8fs6lroQXLDbqSE0dwLcHdYAbHd1UULcKZ_SQB_k9vFLUmg&locale=zh-CN&location=trial" 
+                            allowfullscreen>
+                        </iframe>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+</body>
+</html>
