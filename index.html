@@ -22,11 +22,9 @@
     lang: 'en',
     currentTab: 'analysis',
     toast: { show: false, message: '', type: 'info' },
-    
     toggleLang() {
         this.lang = this.lang === 'en' ? 'cn' : 'en';
     },
-    
     showNotification(featureKey) {
         const messages = {
             dashboard: {
@@ -50,12 +48,10 @@
                 cn: '用户档案由企业 SSO 单点登录系统托管。'
             }
         };
-        
         this.toast.message = messages[featureKey][this.lang];
         this.toast.show = true;
         setTimeout(() => { this.toast.show = false }, 3000);
     },
-
     t(key) {
         const dict = {
             en: {
@@ -163,7 +159,6 @@
 
         <div class="flex-1 p-6 overflow-hidden">
             <div class="grid grid-cols-12 gap-6 h-full">
-                
                 <div class="col-span-12 lg:col-span-8 flex flex-col h-full rounded-lg overflow-hidden shadow-sm border border-gray-200 bg-white">
                     <div class="px-4 py-3 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
                         <div class="flex items-center text-sm font-medium text-gray-700">
@@ -173,17 +168,11 @@
                         <div class="text-[10px] text-gray-400 font-mono">ID: siu8eqe4x2</div>
                     </div>
                     <div class="flex-1 bg-black relative">
-                        <!-- 
-                            修复点：
-                            1. 添加了 allowPostMessage=true 参数，开启跨域通信。
-                            2. 移除了多余的问号。
-                            3. 添加了 id 和 name 属性，确保 Mediator 脚本能找到它。
-                        -->
-                        <iframe 
+                        <iframe
                             id="vi-player"
                             name="vi-player"
-                            src="https://www.videoindexer.ai/embed/player/de2875f1-eaa8-43ef-b9fe-ff03a062f784/siu8eqe4x2/?locale=zh-CN&location=trial&allowPostMessage=true" 
-                            allowfullscreen 
+                            src="https://www.videoindexer.ai/embed/player/de2875f1-eaa8-43ef-b9fe-ff03a062f784/siu8eqe4x2/?locale=zh-CN&location=trial"
+                            allowfullscreen
                             allow="autoplay; fullscreen; encrypted-media">
                         </iframe>
                     </div>
@@ -197,15 +186,10 @@
                         </div>
                     </div>
                     <div class="flex-1 relative">
-                        <!-- 
-                            修复点：
-                            1. 添加了 allowPostMessage=true 参数。
-                            2. 添加了 id 和 name。
-                        -->
-                        <iframe 
+                        <iframe
                             id="vi-insights"
                             name="vi-insights"
-                            src="https://www.videoindexer.ai/embed/insights/de2875f1-eaa8-43ef-b9fe-ff03a062f784/siu8eqe4x2/?locale=zh-CN&location=trial&allowPostMessage=true" 
+                            src="https://www.videoindexer.ai/embed/insights/de2875f1-eaa8-43ef-b9fe-ff03a062f784/siu8eqe4x2/?locale=zh-CN&location=trial"
                             allowfullscreen>
                         </iframe>
                     </div>
@@ -214,7 +198,7 @@
             </div>
         </div>
     </main>
-    <!-- Microsoft Widget Mediator: 这个脚本会自动寻找页面上有 allowPostMessage 的 iframe 并连接它们 -->
+
     <script src="https://aka.ms/vi-mediator-file"></script>
 </body>
 </html>
