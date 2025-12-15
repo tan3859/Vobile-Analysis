@@ -173,11 +173,18 @@
                         <div class="text-[10px] text-gray-400 font-mono">ID: siu8eqe4x2</div>
                     </div>
                     <div class="flex-1 bg-black relative">
-                        <!-- Player Widget -->
+                        <!-- 
+                            修复点：
+                            1. 添加了 allowPostMessage=true 参数，开启跨域通信。
+                            2. 移除了多余的问号。
+                            3. 添加了 id 和 name 属性，确保 Mediator 脚本能找到它。
+                        -->
                         <iframe 
-                            src="https://www.videoindexer.ai/embed/player/de2875f1-eaa8-43ef-b9fe-ff03a062f784/siu8eqe4x2/?&locale=zh-CN&location=trial" 
+                            id="vi-player"
+                            name="vi-player"
+                            src="https://www.videoindexer.ai/embed/player/de2875f1-eaa8-43ef-b9fe-ff03a062f784/siu8eqe4x2/?locale=zh-CN&location=trial&allowPostMessage=true" 
                             allowfullscreen 
-                            allow="autoplay; fullscreen">
+                            allow="autoplay; fullscreen; encrypted-media">
                         </iframe>
                     </div>
                 </div>
@@ -190,9 +197,15 @@
                         </div>
                     </div>
                     <div class="flex-1 relative">
-                        <!-- Insights Widget -->
+                        <!-- 
+                            修复点：
+                            1. 添加了 allowPostMessage=true 参数。
+                            2. 添加了 id 和 name。
+                        -->
                         <iframe 
-                            src="https://www.videoindexer.ai/embed/insights/de2875f1-eaa8-43ef-b9fe-ff03a062f784/siu8eqe4x2/?&locale=zh-CN&location=trial" 
+                            id="vi-insights"
+                            name="vi-insights"
+                            src="https://www.videoindexer.ai/embed/insights/de2875f1-eaa8-43ef-b9fe-ff03a062f784/siu8eqe4x2/?locale=zh-CN&location=trial&allowPostMessage=true" 
                             allowfullscreen>
                         </iframe>
                     </div>
@@ -201,7 +214,7 @@
             </div>
         </div>
     </main>
-    <!-- Microsoft Widget Mediator: 负责同步播放器和数据面板的通信 -->
+    <!-- Microsoft Widget Mediator: 这个脚本会自动寻找页面上有 allowPostMessage 的 iframe 并连接它们 -->
     <script src="https://breakdown.blob.core.windows.net/public/vb.widgets.mediator.js"></script>
 </body>
 </html>
